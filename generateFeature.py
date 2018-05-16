@@ -13,7 +13,7 @@ training_sample_paths = []
 y = []
 brand = ["audi", "benz", "bmw", "chevrolet", "honda", "lexus", "toyota", "volkswagon"]
 
-for brand_num in range(len(brand)):
+for brand_num in range(len(brand)):#здесь он заполняет training_sample_paths путями и y цифрами, которым соответствует марка
 #for brand_num in range(1):
     for root, dirs, files in os.walk("./TrainingSet/" + brand[brand_num]):
         for filename in files:
@@ -45,7 +45,7 @@ for brand_num in range(len(brand)):
 
 # Feature Extraction for NN
 y = np.repeat(y, 30)
-features = np.empty([len(y), 3200])
+features = np.empty([len(y), 3200])#НЕ ПОНЯЛ ЗАЧЕМ
 
 row_count = 0
 for image_path in training_sample_paths:

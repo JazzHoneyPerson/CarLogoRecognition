@@ -5,6 +5,7 @@
 # Output images in ./TrainingSet folder
 # Extract and segment the Car Logo part and convert to grayscale
 #
+# Этот код берет из папки Logo фотки, накладывает на них филбтр и сохраняет все в training set
 
 import glob
 import os
@@ -32,14 +33,14 @@ def getOutputPath(l, logo, num):
 
 
 def processOneImage(inputPath, outputPaths):
-    image = io.imread(inputPath)
-    greyImage = rgb2grey(image)
-    threshold = threshold_otsu(greyImage)
-    imgout = closing(greyImage > threshold, square(1))
-    imgout = crop(imgout)
-    imgout = transform.resize(imgout, (max(imgout.shape), max(imgout.shape)))
+    image = io.imread(inputPath)#получаем массив пикселей
+    greyImage = rgb2grey(image)#переводим в серый цвет
+    threshold = threshold_otsu(greyImage)#высчитываем порог вхождения пикселей
+    imgout = closing(greyImage > threshold, square(1))#булевый массив, если пиксель проходит порог, то true, иначе false
+    imgout = crop(imgout)#обрезаем, убирая части где порог не пройден
+    imgout = transform.resize(imgout, (max(imgout.shape), max(imgout.shape)))#переводим булы в цифры
     for outputPath in outputPaths:
-        io.imsave(outputPath, imgout)
+        io.imsave(outputPath, imgout)#сохраняем
 
 
 def crop(a):
@@ -73,11 +74,11 @@ def crop(a):
 if not os.path.isdir("./TrainingSet/"):
     os.mkdir("./TrainingSet/")
 
-logos = ['audi', 'bmw', 'chevrolet', 'honda', 'lexus', 'toyota', 'volkswagon', 'benz']
+logos = ['audi', 'bmw', 'chevrolet', 'honda', 'lexus', 'toyota', 'volkswagon', 'benz']#машинки
 #logos = ['volkswagon']
 for logo in logos:
     num = 1
-    for image in glob.glob('./Logos/' + logo + '/*.*'):
+    for image in glob.glob('./Logos/' + logo + '/*.*'):#проходимся по всему списку папки с логотипом
         if image.endswith('.jpg') or image.endswith('.jpeg') or image.endswith('.png') or image.endswith('.bmp'):
             inputPath = image
             outputPath1 = getOutputPath(image.split('/'), logo, num)
@@ -88,4 +89,4 @@ for logo in logos:
 
             outputPath2 = outputPath2_dir + str(num) + ".jpg"
             num += 1
-            processOneImage(image, [outputPath2])
+            processOneImage(image, [outputPath2])#фильтруем картинку
