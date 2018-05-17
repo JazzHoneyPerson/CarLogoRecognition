@@ -116,22 +116,23 @@ def predict(final_t, X):
     return dummy
 
 data = np.load("data.npz")
-X = data['arr_0']
-y = data['arr_1']
+X = data['arr_0']#множество картинок представленных в виде HOG
+y = data['arr_1']#правильные ответы
 
-mask = np.random.choice([False, True], len(X), p=[0.1, 0.9])
-training_X = X[mask, :]
-training_y = y[mask]
-testing_X = X[np.logical_not(mask), :]
+mask = np.random.choice([False, True], len(X), p=[0.1, 0.9])#создаем маску, чтобы 
+#разбить массив картинок на тренировку и тестировка 1(тест) к 9(тренировка)
+training_X = X[mask, :]#картинки для тренировки
+training_y = y[mask]#логотипы картинок для тренировки
+testing_X = X[np.logical_not(mask), :]#картинки для тестинга
 testing_y = y[np.logical_not(mask)]
 
-init_t1 = initialize_theta(INPUT_LAYER_SIZE, HIDDEN_LAYER_SIZE).flatten('F')
-init_t2 = initialize_theta(HIDDEN_LAYER_SIZE, OUTPUT_LAYER_SIZE).flatten('F')
-init_t = np.concatenate([init_t1, init_t2])
+init_t1 = initialize_theta(INPUT_LAYER_SIZE, HIDDEN_LAYER_SIZE).flatten('F')#инициализируем весы на ребрах входного и внутреннего слоя
+init_t2 = initialize_theta(HIDDEN_LAYER_SIZE, OUTPUT_LAYER_SIZE).flatten('F')#инициализируем весы на ребрах внутреннего-выходного слоя
+init_t = np.concatenate([init_t1, init_t2])#склейка двух массивов с весами?
 
 itrCount = 0
 
-final_t = optimize.fmin_cg(costFunc, init_t, fprime=gradFunc, args=(training_X, training_y, 0.05), full_output=1)
+final_t = optimize.fmin_cg(costFunc, init_t, fprime=gradFunc, args=(training_X, training_y, 0.05), full_output=1)#поиск минимальной ошибки?
 
 pred = predict(final_t[0], testing_X) + 1
 
