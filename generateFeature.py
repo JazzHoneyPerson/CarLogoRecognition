@@ -51,7 +51,9 @@ row_count = 0
 for image_path in training_sample_paths:#проходимся по созданному массиву картинок(путей)
     image = io.imread(image_path)
     image = transform.resize(image, (400, 400))#настраиваем размер картинки под нужный
-    for i in range(10):#И ПРИ ЧЕМ ЗДЕСЬ 10?
+    for i in range(10):#И ПРИ ЧЕМ ЗДЕСЬ 10?#UPD: зачем-то 10 раз добавляет одну и ту же картинку, постаянно высчитывает
+. один и тот же hog
+
         image_new = image * np.random.normal(1.0, 0.2) + np.random.normal(0, 0.2)#
         image_new = np.maximum(np.minimum(image, 1.0), 0.0)#зачем, если дальше не используется
 

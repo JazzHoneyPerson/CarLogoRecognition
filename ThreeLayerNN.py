@@ -20,13 +20,16 @@ OUTPUT_LAYER_SIZE = 8
 
 def sigmoid(z):
     return np.divide(1.0, 1.0 + np.exp(-1 * z))
+#np.divide - делит один массив на другой
+
 
 def sigmoid_gradient(z):
     return sigmoid(z) * (1 - sigmoid(z))
 
 def initialize_theta(l_in, l_out):
     eps_init = 0.12
-    return np.random.rand(l_out, 1 + l_in) * 2 * eps_init - eps_init
+    return np.random.rand(l_out, 1 + l_in) * 2 * eps_init - eps_init#инициализация весов происходит рандомным образом, 
+#чтобы они были ближе к оптимальному варианту
 
 '''
 weight_1d: weight of each neuron
@@ -39,9 +42,9 @@ def costFunc(x, *args):
                         (HIDDEN_LAYER_SIZE, INPUT_LAYER_SIZE + 1), order='F')
     theta2 = np.reshape(x[HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1):],
                         (OUTPUT_LAYER_SIZE, HIDDEN_LAYER_SIZE + 1), order='F')
-    m = np.size(X, 0)
+    m = np.size(X, 0)#высчитывем размер массива значений
 
-    a1 = np.c_[np.ones((m, 1)), X]
+    a1 = np.c_[np.ones((m, 1)), X]#(смайлик:застрелиться)
     a2 = np.c_[np.ones((m, 1)), sigmoid(a1.dot(np.transpose(theta1)))]
     a3 = sigmoid(a2.dot(np.transpose(theta2)))
 
@@ -61,7 +64,7 @@ def costFunc(x, *args):
 
     return J + reg
 
-def gradFunc(x, *args):
+def gradFunc(x, *args):#считаем градиент функции costFunc
     X, y, lam = args
     theta1 = np.reshape(x[0:HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1)],
                         (HIDDEN_LAYER_SIZE, INPUT_LAYER_SIZE + 1), order='F')
@@ -134,7 +137,7 @@ itrCount = 0
 
 final_t = optimize.fmin_cg(costFunc, init_t, fprime=gradFunc, args=(training_X, training_y, 0.05), full_output=1)#поиск минимальной ошибки?
 
-pred = predict(final_t[0], testing_X) + 1
+pred = predict(final_t[0], testing_X) + 1#тестирование
 
 np.save('thetas1', final_t[0])
 #io.savemat('thetas.mat', {'t_1d': final_t[0]})
