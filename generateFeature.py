@@ -2,6 +2,7 @@
 # Yu Fu
 
 import os
+import Base
 import numpy as np
 import scipy.io
 import matplotlib.pyplot as plt
@@ -11,7 +12,7 @@ from skimage import data, color, exposure
 
 training_sample_paths = []
 y = []
-brand = ["audi", "benz", "bmw", "chevrolet", "honda", "lexus", "toyota", "volkswagon"]
+brand = Base.logos
 
 for brand_num in range(len(brand)):#здесь он заполняет training_sample_paths путями и y цифрами, которым соответствует марка
 #for brand_num in range(1):

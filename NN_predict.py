@@ -14,6 +14,7 @@ import os
 import numpy as np
 import scipy.io
 import matplotlib.pyplot as plt
+import Base
 from skimage import io, transform, morphology
 from skimage.feature import hog
 from skimage import data, color, exposure
@@ -25,7 +26,7 @@ from skimage.color import rgb2grey, label2rgb
 from skimage.util import pad
 
 def predictImage(img_path, theta_path):
-    brands = ["audi", "benz", "bmw", "chevrolet", "honda", "lexus", "toyota", "volkswagon"]
+    brands = Base.logos
     processOneImage(img_path, './temp.jpg')
     image = io.imread('./temp.jpg')
     image = transform.resize(image, (400, 400))
@@ -74,9 +75,9 @@ def crop(a):
     return a[minr:maxr, minc:maxc]
 
 def predict(final_t, X):
-    INPUT_LAYER_SIZE = 3200
-    HIDDEN_LAYER_SIZE = 1600
-    OUTPUT_LAYER_SIZE = 8
+    INPUT_LAYER_SIZE = Base.INPUT_LAYER_SIZE
+    HIDDEN_LAYER_SIZE = Base.HIDDEN_LAYER_SIZE
+    OUTPUT_LAYER_SIZE = Base.OUTPUT_LAYER_SIZE
     theta1 = np.reshape(final_t[0:HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1)],
                         (HIDDEN_LAYER_SIZE, INPUT_LAYER_SIZE + 1), order='F')
     theta2 = np.reshape(final_t[HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1):],
