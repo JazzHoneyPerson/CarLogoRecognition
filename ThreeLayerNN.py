@@ -37,11 +37,9 @@ def initialize_theta(l_in, l_out):
 weight_1d: weight of each neuron #x
 paras: (X, y, lambda)
 '''
-<<<<<<< HEAD
-def costFunc(x, *args):#Функция потерь (см. Вики)
-=======
+
 def costFunc(weights, *args):
->>>>>>> 88fa41df25d4313ad1ff3b388c378116b09162c2
+
     X, y, lam = args
 
     theta1 = np.reshape(weights[0:HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1)],
@@ -51,7 +49,7 @@ def costFunc(weights, *args):
     m = np.size(X, 0)#высчитывем количество значений
 
     a1 = np.c_[np.ones((m, 1)), X]#добавляем вес активации?#input
-    a2 = np.c_[np.ones((m, 1))'''Так же добавляем вес активации?''', sigmoid(a1.dot(np.transpose(theta1))'''Умножаем весы на значения''')'''Берем сигмоиду этого значения помноженную на весы''']#a.dot(b)-произведение матриц#hidden
+    a2 = np.c_[np.ones((m, 1)), sigmoid(a1.dot(np.transpose(theta1)))]#a.dot(b)-произведение матриц#hidden
     a3 = sigmoid(a2.dot(np.transpose(theta2)))#конечный результат#output
 
     yk = np.zeros((OUTPUT_LAYER_SIZE, m))#Функция zeros() создает массив из нулей
