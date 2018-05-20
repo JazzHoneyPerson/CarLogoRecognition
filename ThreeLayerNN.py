@@ -20,7 +20,7 @@ INPUT_LAYER_SIZE = Base.INPUT_LAYER_SIZE#количество нейронов �
 HIDDEN_LAYER_SIZE = Base.HIDDEN_LAYER_SIZE#на внутреннем
 OUTPUT_LAYER_SIZE = Base.OUTPUT_LAYER_SIZE#выходном
 
-def sigmoid(z):
+def sigmoid(z):#подозрительно короткая сигмоида
     return np.divide(1.0, 1.0 + np.exp(-1 * z))
 #np.divide - делит один массив на другой
 
@@ -37,7 +37,11 @@ def initialize_theta(l_in, l_out):
 weight_1d: weight of each neuron #x
 paras: (X, y, lambda)
 '''
+<<<<<<< HEAD
+def costFunc(x, *args):#Функция потерь (см. Вики)
+=======
 def costFunc(weights, *args):
+>>>>>>> 88fa41df25d4313ad1ff3b388c378116b09162c2
     X, y, lam = args
 
     theta1 = np.reshape(weights[0:HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1)],
@@ -109,16 +113,19 @@ def gradFunc(x, *args):#считаем градиент функции costFunc
 
 
 data = np.load("data.npz")
+print("Load Is Ok")
 X = data['arr_0']#множество картинок представленных в виде HOG
+print("1")
 y = data['arr_1']#правильные ответы
 
 mask = np.random.choice([False, True], len(X), p=[0.1, 0.9])#создаем маску, чтобы 
 #разбить массив картинок на тренировку и тестировка 1(тест) к 9(тренировка)
+print("2")
 training_X = X[mask, :]#картинки для тренировки
 training_y = y[mask]#логотипы картинок для тренировки(для проверки)
 testing_X = X[np.logical_not(mask), :]#картинки для тестинга
 testing_y = y[np.logical_not(mask)]
-
+print("3")
 init_t1 = initialize_theta(INPUT_LAYER_SIZE, HIDDEN_LAYER_SIZE).flatten('F')#инициализируем весы на ребрах входного и внутреннего слоя
 init_t2 = initialize_theta(HIDDEN_LAYER_SIZE, OUTPUT_LAYER_SIZE).flatten('F')#инициализируем весы на ребрах внутреннего-выходного слоя
 init_t = np.concatenate([init_t1, init_t2])#склейка двух массивов с весами?
