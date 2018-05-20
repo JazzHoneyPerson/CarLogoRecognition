@@ -24,6 +24,8 @@ from skimage.measure import label, regionprops
 from skimage.morphology import closing, square
 from skimage.color import rgb2grey, label2rgb
 from skimage.util import pad
+from imageProcess import processOneimage
+
 
 def predictImage(img_path, theta_path):
     brands = Base.logos
@@ -38,41 +40,6 @@ def predictImage(img_path, theta_path):
     prediction = predict(thetas, features)
     return brands[prediction]
 
-def processOneImage(inputPath, outputPath):
-    image = io.imread(inputPath)
-    greyImage = rgb2grey(image)
-    threshold = threshold_otsu(greyImage)
-    imgout = closing(greyImage > threshold, square(1))
-    imgout = crop(imgout)
-    imgout = transform.resize(imgout, (max(imgout.shape), max(imgout.shape)))
-    io.imsave(outputPath, imgout)
-
-def crop(a):
-    minr = 0
-    for r in range(a.shape[0]):
-        if all(a[r, :] == 1):
-            minr += 1
-        else:
-            break
-    maxr = a.shape[0]-1
-    for r in range(a.shape[0]-1, -1, -1):
-        if all(a[r, :] == 1):
-            maxr -= 1
-        else:
-            break
-    minc = 0
-    for c in range(a.shape[1]):
-        if all(a[:, c] == 1):
-            minc += 1
-        else:
-            break
-    maxc = a.shape[1]-1
-    for c in range(a.shape[1]-1, -1, -1):
-        if all(a[:, c] == 1):
-            maxc -= 1
-        else:
-            break
-    return a[minr:maxr, minc:maxc]
 
 def predict(final_t, X):
     INPUT_LAYER_SIZE = Base.INPUT_LAYER_SIZE

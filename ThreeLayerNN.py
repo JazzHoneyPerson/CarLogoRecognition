@@ -14,6 +14,7 @@ import numpy as np
 from scipy import optimize
 from scipy import io
 import Base
+from NN_predict import predict
 
 INPUT_LAYER_SIZE = Base.INPUT_LAYER_SIZE#количество нейронов на входном слое
 HIDDEN_LAYER_SIZE = Base.HIDDEN_LAYER_SIZE#на внутреннем
@@ -105,20 +106,7 @@ def gradFunc(x, *args):#считаем градиент функции costFunc
 
     return np.concatenate((theta1_grad.flatten('F'), theta2_grad.flatten('F')))
 
-def predict(final_t'''готовые весы''', X):
-    theta1 = np.reshape(final_t[0:HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1)],
-                        (HIDDEN_LAYER_SIZE, INPUT_LAYER_SIZE + 1), order='F')
-    theta2 = np.reshape(final_t[HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1):],
-                    (OUTPUT_LAYER_SIZE, HIDDEN_LAYER_SIZE + 1), order='F')
-    m = np.size(X, 0)
-    p = np.zeros((m, 1))
 
-    h1 = sigmoid(np.c_[np.ones((m, 1)), X].dot(np.transpose(theta1)))
-    h2 = sigmoid(np.c_[np.ones((m, 1)), h1].dot(np.transpose(theta2)))
-
-    p = np.amax(h2, 1)#зачем это считать, если потом не используется?
-    dummy = np.argmax(h2, 1)
-    return dummy
 
 data = np.load("data.npz")
 X = data['arr_0']#множество картинок представленных в виде HOG
