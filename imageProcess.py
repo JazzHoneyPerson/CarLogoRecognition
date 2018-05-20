@@ -22,6 +22,7 @@ from skimage.measure import label, regionprops
 from skimage.morphology import closing, square
 from skimage.color import rgb2grey, label2rgb
 from skimage.util import pad
+import Base
 
 
 def getOutputPath(l, logo, num):
@@ -74,8 +75,13 @@ def crop(a):
 if not os.path.isdir("./TrainingSet/"):
     os.mkdir("./TrainingSet/")
 
+<<<<<<< HEAD
 logos = ["audi", "benz", "bmw", "chevrolet", "citroen", "honda", "hyundai", "infinity", "lada", "lexus","nissan","tesla", "toyota", "volkswagon"]#машинки
 #logos = ['volkswagon']
+=======
+logos = Base.logos#машинки
+
+>>>>>>> 88fa41df25d4313ad1ff3b388c378116b09162c2
 for logo in logos:
     num = 1
     for image in glob.glob('./Logos/' + logo + '/*.*'):#проходимся по всему списку папки с логотипом

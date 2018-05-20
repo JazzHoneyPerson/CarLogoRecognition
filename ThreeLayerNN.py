@@ -13,10 +13,11 @@
 import numpy as np
 from scipy import optimize
 from scipy import io
+import Base
 
-INPUT_LAYER_SIZE = 3200
-HIDDEN_LAYER_SIZE = 1600
-OUTPUT_LAYER_SIZE = 8
+INPUT_LAYER_SIZE = Base.INPUT_LAYER_SIZE#количество нейронов на входном слое
+HIDDEN_LAYER_SIZE = Base.HIDDEN_LAYER_SIZE#на внутреннем
+OUTPUT_LAYER_SIZE = Base.OUTPUT_LAYER_SIZE#выходном
 
 def sigmoid(z):#подозрительно короткая сигмоида
     return np.divide(1.0, 1.0 + np.exp(-1 * z))
@@ -32,27 +33,31 @@ def initialize_theta(l_in, l_out):
 #чтобы они были ближе к оптимальному варианту
 
 '''
-weight_1d: weight of each neuron
+weight_1d: weight of each neuron #x
 paras: (X, y, lambda)
 '''
+<<<<<<< HEAD
 def costFunc(x, *args):#Функция потерь (см. Вики)
+=======
+def costFunc(weights, *args):
+>>>>>>> 88fa41df25d4313ad1ff3b388c378116b09162c2
     X, y, lam = args
 
-    theta1 = np.reshape(x[0:HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1)],
+    theta1 = np.reshape(weights[0:HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1)],
                         (HIDDEN_LAYER_SIZE, INPUT_LAYER_SIZE + 1), order='F')
-    theta2 = np.reshape(x[HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1):],
+    theta2 = np.reshape(weights[HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1):],
                         (OUTPUT_LAYER_SIZE, HIDDEN_LAYER_SIZE + 1), order='F')
-    m = np.size(X, 0)#высчитывем размер массива значений
+    m = np.size(X, 0)#высчитывем количество значений
 
-    a1 = np.c_[np.ones((m, 1)), X]#(смайлик:застрелиться)
-    a2 = np.c_[np.ones((m, 1)), sigmoid(a1.dot(np.transpose(theta1)))]
-    a3 = sigmoid(a2.dot(np.transpose(theta2)))
+    a1 = np.c_[np.ones((m, 1)), X]#добавляем вес активации?#input
+    a2 = np.c_[np.ones((m, 1))'''Так же добавляем вес активации?''', sigmoid(a1.dot(np.transpose(theta1))'''Умножаем весы на значения''')'''Берем сигмоиду этого значения помноженную на весы''']#a.dot(b)-произведение матриц#hidden
+    a3 = sigmoid(a2.dot(np.transpose(theta2)))#конечный результат#output
 
-    yk = np.zeros((OUTPUT_LAYER_SIZE, m))
+    yk = np.zeros((OUTPUT_LAYER_SIZE, m))#Функция zeros() создает массив из нулей
     for i in range(m):
-        yk[y[i] - 1, i] = 1
+        yk[y[i] - 1, i] = 1#создаем массив правильных ответов
 
-    J = np.sum(np.sum(-1 * np.transpose(yk) * np.log(a3) - np.transpose(1 - yk) * np.log(1 - a3))) / m
+    J = np.sum(np.sum(-1 * np.transpose(yk) * np.log(a3) - np.transpose(1 - yk) * np.log(1 - a3))) / m#сверяем ответы, я не понимаю что за херня здесь происходит
 
     theta1_unbiased = theta1[:, 1:]
     theta2_unbiased = theta2[:, 1:]
@@ -62,9 +67,10 @@ def costFunc(x, *args):#Функция потерь (см. Вики)
     print("Iteration {}: cost is {}".format(itrCount, J + reg))
     itrCount += 1
 
-    return J + reg
+    return J + reg#возращаем количество ошибок
 
 def gradFunc(x, *args):#считаем градиент функции costFunc
+    #градиент помогает быстрей найти минимум?
     X, y, lam = args
     theta1 = np.reshape(x[0:HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1)],
                         (HIDDEN_LAYER_SIZE, INPUT_LAYER_SIZE + 1), order='F')
@@ -103,7 +109,7 @@ def gradFunc(x, *args):#считаем градиент функции costFunc
 
     return np.concatenate((theta1_grad.flatten('F'), theta2_grad.flatten('F')))
 
-def predict(final_t, X):
+def predict(final_t'''готовые весы''', X):
     theta1 = np.reshape(final_t[0:HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1)],
                         (HIDDEN_LAYER_SIZE, INPUT_LAYER_SIZE + 1), order='F')
     theta2 = np.reshape(final_t[HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1):],
@@ -114,7 +120,7 @@ def predict(final_t, X):
     h1 = sigmoid(np.c_[np.ones((m, 1)), X].dot(np.transpose(theta1)))
     h2 = sigmoid(np.c_[np.ones((m, 1)), h1].dot(np.transpose(theta2)))
 
-    p = np.amax(h2, 1)
+    p = np.amax(h2, 1)#зачем это считать, если потом не используется?
     dummy = np.argmax(h2, 1)
     return dummy
 
@@ -128,7 +134,7 @@ mask = np.random.choice([False, True], len(X), p=[0.1, 0.9])#создаем ма
 #разбить массив картинок на тренировку и тестировка 1(тест) к 9(тренировка)
 print("2")
 training_X = X[mask, :]#картинки для тренировки
-training_y = y[mask]#логотипы картинок для тренировки
+training_y = y[mask]#логотипы картинок для тренировки(для проверки)
 testing_X = X[np.logical_not(mask), :]#картинки для тестинга
 testing_y = y[np.logical_not(mask)]
 print("3")
