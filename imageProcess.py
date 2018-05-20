@@ -74,7 +74,7 @@ def crop(a):
 if not os.path.isdir("./TrainingSet/"):
     os.mkdir("./TrainingSet/")
 
-logos = ['audi', 'bmw', 'chevrolet', 'honda', 'lexus', 'toyota', 'volkswagon', 'benz']#машинки
+logos = ["audi", "benz", "bmw", "chevrolet", "citroen", "honda", "hyundai", "infinity", "lada", "lexus","nissan","tesla", "toyota", "volkswagon"]#машинки
 #logos = ['volkswagon']
 for logo in logos:
     num = 1

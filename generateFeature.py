@@ -11,7 +11,7 @@ from skimage import data, color, exposure
 
 training_sample_paths = []
 y = []
-brand = ["audi", "benz", "bmw", "chevrolet", "honda", "lexus", "toyota", "volkswagon"]
+brand = ["audi", "benz", "bmw", "chevrolet", "citroen", "honda", "hyundai", "infinity"] #"lada", "lexus","nissan","tesla", "toyota", "volkswagon"]
 
 for brand_num in range(len(brand)):#здесь он заполняет training_sample_paths путями и y цифрами, которым соответствует марка
 #for brand_num in range(1):
@@ -52,7 +52,7 @@ for image_path in training_sample_paths:#проходимся по создан�
     image = io.imread(image_path)
     image = transform.resize(image, (400, 400))#настраиваем размер картинки под нужный
     for i in range(10):#И ПРИ ЧЕМ ЗДЕСЬ 10?#UPD: зачем-то 10 раз добавляет одну и ту же картинку, постаянно высчитывает
-. один и тот же hog
+# один и тот же hog
 
         image_new = image * np.random.normal(1.0, 0.2) + np.random.normal(0, 0.2)#
         image_new = np.maximum(np.minimum(image, 1.0), 0.0)#зачем, если дальше не используется

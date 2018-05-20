@@ -25,7 +25,7 @@ from skimage.color import rgb2grey, label2rgb
 from skimage.util import pad
 
 def predictImage(img_path, theta_path):
-    brands = ["audi", "benz", "bmw", "chevrolet", "honda", "lexus", "toyota", "volkswagon"]
+    brands = ["audi", "benz", "bmw", "chevrolet", "citroen", "honda", "hyundai", "infinity", "lada", "lexus","nissan","tesla", "toyota", "volkswagon"]
     processOneImage(img_path, './temp.jpg')
     image = io.imread('./temp.jpg')
     image = transform.resize(image, (400, 400))
@@ -76,7 +76,7 @@ def crop(a):
 def predict(final_t, X):
     INPUT_LAYER_SIZE = 3200
     HIDDEN_LAYER_SIZE = 1600
-    OUTPUT_LAYER_SIZE = 8
+    OUTPUT_LAYER_SIZE = 14
     theta1 = np.reshape(final_t[0:HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1)],
                         (HIDDEN_LAYER_SIZE, INPUT_LAYER_SIZE + 1), order='F')
     theta2 = np.reshape(final_t[HIDDEN_LAYER_SIZE * (INPUT_LAYER_SIZE + 1):],
