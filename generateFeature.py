@@ -2,13 +2,12 @@
 # Yu Fu
 
 import os
-import Base
 import numpy as np
-import scipy.io
-import matplotlib.pyplot as plt
+
 from skimage import io, transform, morphology
 from skimage.feature import hog
-from skimage import data, color, exposure
+import Base
+
 
 training_sample_paths = []
 y = []
@@ -46,31 +45,29 @@ for brand_num in range(len(brand)):#здесь он заполняет training_
 # End of hog test
 
 # Feature Extraction for NN
-y = np.repeat(y, 30)
+y = np.repeat(y, 3)
 features = np.empty([len(y), 3200])
 
 row_count = 0
 for image_path in training_sample_paths:#проходимся по созданному массиву картинок(путей)
     image = io.imread(image_path)
     image = transform.resize(image, (400, 400))#настраиваем размер картинки под нужный
-    for i in range(10):#И ПРИ ЧЕМ ЗДЕСЬ 10?#UPD: зачем-то 10 раз добавляет одну и ту же картинку, постаянно высчитывает
-# один и тот же hog
+    
+    image_new = image * np.random.normal(1.0, 0.2) + np.random.normal(0, 0.2)#
+    image_new = np.maximum(np.minimum(image_new, 1.0), 0.0)#зачем, если дальше не используется
 
-        image_new = image * np.random.normal(1.0, 0.2) + np.random.normal(0, 0.2)#
-        image_new = np.maximum(np.minimum(image, 1.0), 0.0)#зачем, если дальше не используется
+    image_new_dilation = morphology.dilation(image_new, morphology.square(2))#Расширение увеличивает яркие области и уменьшает темные области.
 
-        image_new_dilation = morphology.dilation(image, morphology.square(2))#Расширение увеличивает яркие области и уменьшает темные области.
+    image_new_erosion = morphology.erosion(image_new, morphology.square(2))#обратная операция dilation
 
-        image_new_erosion = morphology.erosion(image, morphology.square(2))#обратная операция dilation
-
-        features[row_count, :] = hog(image, orientations=8,
-                                     pixels_per_cell=(20, 20), cells_per_block=(1, 1))#Гистограмма направленных градиентов(не в курсе что это
-        features[row_count+1, :] = hog(image_new_dilation, orientations=8,
-                                       pixels_per_cell=(20, 20), cells_per_block=(1, 1))#ГНГ Деляции
-        features[row_count+2, :] = hog(image_new_erosion, orientations=8,
-                                       pixels_per_cell=(20, 20), cells_per_block=(1, 1))#ГНГ Эрозии
-        row_count += 3
-    print("Extracting feature from {} out of {} images".format(row_count // 30, len(training_sample_paths)))
+    features[row_count, :] = hog(image_new, orientations=8,
+                                    pixels_per_cell=(20, 20), cells_per_block=(1, 1))#Гистограмма направленных градиентов(не в курсе что это
+    features[row_count+1, :] = hog(image_new_dilation, orientations=8,
+                                    pixels_per_cell=(20, 20), cells_per_block=(1, 1))#ГНГ Деляции
+    features[row_count+2, :] = hog(image_new_erosion, orientations=8,
+                                    pixels_per_cell=(20, 20), cells_per_block=(1, 1))#ГНГ Эрозии
+    row_count += 3
+    print("Extracting feature from {} out of {} images".format(row_count // 3, len(training_sample_paths)))
 
 np.savez("data", features, y)#сохраняем все в зип файл
 

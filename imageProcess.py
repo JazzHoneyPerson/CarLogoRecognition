@@ -9,19 +9,11 @@
 
 import glob
 import os
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from scipy import ndimage
-from scipy import misc
-from skimage import data, io, transform
-from skimage.viewer import ImageViewer
+from skimage import  io, transform
 from skimage.filters import threshold_otsu
-from skimage.segmentation import clear_border
-from skimage.measure import label, regionprops
 from skimage.morphology import closing, square
-from skimage.color import rgb2grey, label2rgb
-from skimage.util import pad
+from skimage.color import rgb2grey
+
 import Base
 
 
@@ -91,4 +83,7 @@ for logo in logos:
 
             outputPath2 = outputPath2_dir + str(num) + ".jpg"
             num += 1
-            processOneImage(image, [outputPath2])#фильтруем картинку
+            try:
+                processOneImage(image, [outputPath2])#фильтруем картинку
+            except Exception:
+                pass
